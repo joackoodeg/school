@@ -1,6 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { routeAccessMap } from "./lib/settings";
 import { NextResponse } from "next/server";
+
+/*
+import { routeAccessMap } from "./lib/settings";
+
+ACTIVAR DSP ESTOY EVITANDO PROTECCION DE RUTAS EN DESARROLLO
 
 const matchers = Object.keys(routeAccessMap).map((route) => ({
   matcher: createRouteMatcher([route]),
@@ -30,4 +34,19 @@ export const config = {
     // Always run for API routes
     "/(api|trpc)(.*)",
   ],
+};
+
+*/
+
+
+export default clerkMiddleware((auth, req) => {
+  const { sessionClaims } = auth();
+
+  console.log("Sesión activa:", sessionClaims);
+
+  return NextResponse.next();
+});
+
+export const config = {
+  matcher: ["/((?!_next|_static|.*\\..*).*)"], // Para que se ejecute en todas las rutas excepto archivos estáticos
 };

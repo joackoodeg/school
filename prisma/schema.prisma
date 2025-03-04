@@ -48,6 +48,7 @@ model Student {
   grade       Grade        @relation(fields: [gradeId], references: [id])
   attendances Attendance[]
   results     Result[]
+  birthday    DateTime
 }
 
 model Teacher {
@@ -62,9 +63,10 @@ model Teacher {
   bloodType String
   sex       UserSex
   createdAt DateTime  @default(now())
-  subject   Subject[]
+  subjects  Subject[]
   lessons   Lesson[]
   classes   Class[]
+  birthday  DateTime
 }
 
 model Parent {
@@ -83,8 +85,8 @@ model Class {
   id            Int            @id @default(autoincrement())
   name          String         @unique
   capacity      Int
-  supervisorId  String
-  supervisor    Teacher        @relation(fields: [supervisorId], references: [id])
+  supervisorId  String?
+  supervisor    Teacher?       @relation(fields: [supervisorId], references: [id])
   lessons       Lesson[]
   students      Student[]
   gradeId       Int
@@ -113,7 +115,7 @@ model Lesson {
   teacherId   String
   teacher     Teacher      @relation(fields: [teacherId], references: [id])
   exams       Exam[]
-  assigments  Assigment[]
+  assignments Assignment[]
   attendances Attendance[]
 }
 
@@ -134,7 +136,7 @@ model Exam {
   results   Result[]
 }
 
-model Assigment {
+model Assignment {
   id        Int      @id @default(autoincrement())
   title     String
   startDate DateTime
@@ -145,14 +147,14 @@ model Assigment {
 }
 
 model Result {
-  id          Int        @id @default(autoincrement())
-  score       Int
-  exam        Exam?      @relation(fields: [examId], references: [id])
-  examId      Int?
-  assigment   Assigment? @relation(fields: [assigmentId], references: [id])
-  assigmentId Int?
-  student     Student    @relation(fields: [studentId], references: [id])
-  studentId   String
+  id           Int         @id @default(autoincrement())
+  score        Int
+  exam         Exam?       @relation(fields: [examId], references: [id])
+  examId       Int?
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignmentId Int?
+  student      Student     @relation(fields: [studentId], references: [id])
+  studentId    String
 }
 
 model Attendance {
